@@ -37,28 +37,38 @@ import dash_io.mime as dim
 im = Image.fromarray(np.random.randint(0, 255, (100,100,3)))
 
 # Encode the image into a data url
-data_url = dim.encode_pillow(im)
+data_url = dim.encode_pillow(im, format="jpg")
 
 # Decode the data url into a PIL image
-im = dim.decode_pillow(data_url)
+im = dim.decode_pillow(data_url, format="jpg")
 ```
 
-The following format are currently supported: `jpg`, `png`
+The following format are currently supported: `jpg`, `png`.
 
 ### Pandas
 
-The following format are currently supported: `jpg`, `png`
+If you use `parquet` or `xlsx`, make sure to install the correct engines, i.e. `pyarrow` and `openpyxl` respectively.
 
+To use it in pandas:
 ```python
 import pandas as pd
 import dash_io.mime as dim
 
+# Dummy data
 data = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
-df = pd.read_csv(data)
+df = pd.DataFrame.from_dict(data)
 
+# To encode/decode in binary CSV format
+encoded = dim.encode_pandas(df, format="csv", index=False)
+decoded = dim.decode_pandas(encoded, format="csv")
+
+# To encode/decode in string CSV format (i.e. text/csv MIME type)
 encoded = dim.encode_pandas(df, format="csv", mime_type="text", mime_subtype="csv", index=False)
 decoded = dim.decode_pandas(encoded, format="csv")
 ```
+
+The following format are currently supported: `csv`, `parquet`, `pickle`, `xlsx`.
+
 
 ## Development
 
