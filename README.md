@@ -62,6 +62,10 @@ df = pd.DataFrame.from_dict(data)
 encoded = dim.encode_pandas(df, format="csv", index=False)
 decoded = dim.decode_pandas(encoded, format="csv")
 
+# To encode/decode in binary parquet format
+encoded = dim.encode_pandas(df, format="parquet")
+decoded = dim.decode_pandas(encoded, format="parquet")
+
 # To encode/decode in string CSV format (i.e. text/csv MIME type)
 encoded = dim.encode_pandas(df, format="csv", mime_type="text", mime_subtype="csv", index=False)
 decoded = dim.decode_pandas(encoded, format="csv")
