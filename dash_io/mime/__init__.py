@@ -147,4 +147,4 @@ def decode_json(data_url):
     header, data = data_url.split(",")
     decoded = base64.b64decode(data)
 
-    return decoded.decode('utf-8')
+    return json.loads(decoded)
