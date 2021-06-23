@@ -88,6 +88,26 @@ decoded = dim.decode_json(encoded)
 encoded = dim.encode_json([1,2,3,4,5])
 ```
 
+Note that if a `dict` key is an integer, it will be converted to string by `json`. This is a normal behavior.
+
+### Pickle
+
+You can also use pickle to store objects as strings:
+```python
+import dash_io.mime as dim
+
+class ExampleClass:
+    num = 35
+    st = "hey"
+
+    def __eq__(self, other):
+        return (self.num == other.num) and (self.st == other.st)
+
+obj = ExampleClass()
+encoded = dim.encode_pickle(obj)
+decoded = dim.decode_pickle(encoded)
+```
+
 
 ## Development
 
