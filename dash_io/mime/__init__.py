@@ -1,4 +1,5 @@
 import base64
+import json
 from io import BytesIO, StringIO
 
 import pandas as pd
@@ -6,6 +7,14 @@ from PIL import Image
 
 
 # Helper functions
+def _infer_buffer(mime_type, mime_subtype):
+    if mime_type == "application" and mime_subtype == "octet-stream":
+        return BytesIO()
+    elif mime_type == "text" and mime_subtype == "csv":
+        return StringIO()
+    else:
+        error_msg = "Incorrect type or subtype. Please choose mime_type='application' and mime_subtype='octet-stream', or mime_type='text' and mime_subtype='csv'."
+        raise ValueError(error_msg)
 
 
 def _verify_data_prefix(data_url):
@@ -79,13 +88,7 @@ def encode_pandas(
 ):
     format = _verify_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
 
-    if mime_type == "application" and mime_subtype == "octet-stream":
-        buffer = BytesIO()
-    elif mime_type == "text" and mime_subtype == "csv":
-        buffer = StringIO()
-    else:
-        error_msg = "Incorrect type or subtype. Please choose mime_type='application' and mime_subtype='octet-stream', or mime_type='text' and mime_subtype='csv'."
-        raise ValueError(error_msg)
+    buffer = _infer_buffer(mime_type, mime_subtype)
 
     if format == "csv":
         df.to_csv(buffer, **kwargs)
@@ -132,3 +135,16 @@ def decode_pandas(data_url, format="csv", **kwargs):
         df = pd.read_excel(buffer, **kwargs)
 
     return df
+
+
+def encode_json(obj, mime_type="application", mime_subtype="json"):
+    encoded = base64.b64encode(json.dumps(obj).encode("utf-8")).decode("utf-8")
+    return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
+
+
+def decode_json(data_url):
+    data_url = _verify_data_prefix(data_url)
+    header, data = data_url.split(",")
+    decoded = base64.b64decode(data)
+
+    return decoded.decode('utf-8')
