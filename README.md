@@ -74,6 +74,21 @@ decoded = dim.decode_pandas(encoded, format="csv")
 The following format are currently supported: `csv`, `parquet`, `pickle`, `xlsx`.
 
 
+### JSON
+
+```python
+import dash_io.mime as dim
+
+# Encode/decode dictionary
+data = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
+encoded = dim.encode_json(data)
+decoded = dim.decode_json(encoded)
+
+# It also works with lists and other JSON-serializable objects
+encoded = dim.encode_json([1,2,3,4,5])
+```
+
+
 ## Development
 
 First, clone this repo:
