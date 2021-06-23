@@ -53,26 +53,31 @@ def get_format(filename):
     return extension
 
 
-def encode_pillow(im, format="png"):
-    format = _validate_format(format, accepted=("png", "jpg", "jpeg"))
+def encode_pillow(im, format="png", mime_type="image", mime_subtype=None, **kwargs):
+    format = _validate_format(format, accepted=("png", "jpg", "jpeg", "gif"))
 
     # comply to mime types
     if format == "jpg":
         format = "jpeg"
 
+    # If no mime subtype is given, we infer from format
+    mime_subtype = format if mime_subtype is None else mime_subtype
+
+    # If the image has transparency and we want to save it as JPEG, need to remove the
+    # last dimension A.
     if format == "jpeg" and im.mode in ("RGBA", "LA"):
         background = Image.new(im.mode[:-1], im.size, (255, 255, 255))
         background.paste(im, im.split()[-1])
         im = background
 
     buffer = BytesIO()
-    im.save(buffer, format=format)
+    im.save(buffer, format=format, **kwargs)
     encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    return f"data:image/{format};base64,{encoded}"
+    return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_pillow(data_url):
+def decode_pillow(data_url, **kwargs):
     data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
     _validate_b64_header(header)
@@ -80,7 +85,7 @@ def decode_pillow(data_url):
     decoded = base64.b64decode(data)
 
     buffer = BytesIO(decoded)
-    im = Image.open(buffer)
+    im = Image.open(buffer, **kwargs)
 
     return im
 
