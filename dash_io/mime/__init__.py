@@ -1,6 +1,7 @@
 import base64
 import json
 from io import BytesIO, StringIO
+import pickle
 
 import pandas as pd
 from PIL import Image
@@ -17,15 +18,16 @@ def _infer_buffer(mime_type, mime_subtype):
         raise ValueError(error_msg)
 
 
-def _verify_data_prefix(data_url):
+def _validate_data_prefix(data_url):
     if data_url.startswith("data:"):
-        return data_url[5:]
+        data_url = data_url[5:]
+        return data_url
     else:
         error_msg = f'The data_url "{data_url[:30]}..." is invalid. It should start with "data:".'
         raise ValueError(error_msg)
 
 
-def _verify_b64_header(header):
+def _validate_b64_header(header):
     if header.endswith(";base64"):
         mediatype = header[:-7]
         return mediatype
@@ -34,14 +36,13 @@ def _verify_b64_header(header):
         raise ValueError(error_msg)
 
 
-def _verify_format(format, accepted):
+def _validate_format(format, accepted):
     format = format.lower()
     if format not in accepted:
         error_msg = f'Format "{format}" cannot be encoded. Please choose an accepted format: {accepted}'
         raise ValueError(error_msg)
 
     return format
-
 
 # Main functions
 
@@ -53,7 +54,7 @@ def get_format(filename):
 
 
 def encode_pillow(im, format="png"):
-    format = _verify_format(format, accepted=("png", "jpg", "jpeg"))
+    format = _validate_format(format, accepted=("png", "jpg", "jpeg"))
 
     # comply to mime types
     if format == "jpg":
@@ -72,11 +73,12 @@ def encode_pillow(im, format="png"):
 
 
 def decode_pillow(data_url):
-    data_url = _verify_data_prefix(data_url)
+    data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
-    _verify_b64_header(header)
+    _validate_b64_header(header)
 
     decoded = base64.b64decode(data)
+
     buffer = BytesIO(decoded)
     im = Image.open(buffer)
 
@@ -86,7 +88,7 @@ def decode_pillow(data_url):
 def encode_pandas(
     df, format="csv", mime_type="application", mime_subtype="octet-stream", **kwargs
 ):
-    format = _verify_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
+    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
 
     buffer = _infer_buffer(mime_type, mime_subtype)
 
@@ -110,11 +112,12 @@ def encode_pandas(
 
 
 def decode_pandas(data_url, format="csv", **kwargs):
-    format = _verify_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
+    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
 
-    data_url = _verify_data_prefix(data_url)
+    data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
-    mime_type, mime_subtype = _verify_b64_header(header).split("/")
+    mime_type, mime_subtype = _validate_b64_header(header).split("/")
+
     decoded = base64.b64decode(data)
 
     if mime_type == "text" and mime_subtype == "csv":
@@ -137,14 +140,33 @@ def decode_pandas(data_url, format="csv", **kwargs):
     return df
 
 
-def encode_json(obj, mime_type="application", mime_subtype="json"):
-    encoded = base64.b64encode(json.dumps(obj).encode("utf-8")).decode("utf-8")
+def encode_json(obj, mime_type="application", mime_subtype="json", **kwargs):
+    dumped = json.dumps(obj, **kwargs).encode("utf-8")
+    encoded = base64.b64encode(dumped).decode("utf-8")
     return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_json(data_url):
-    data_url = _verify_data_prefix(data_url)
+def decode_json(data_url, **kwargs):
+    data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
+    _validate_b64_header(header)
+
     decoded = base64.b64decode(data)
 
-    return json.loads(decoded)
+    return json.loads(decoded, **kwargs)
+
+
+def encode_pickle(obj, mime_type="application", mime_subtype="octet-stream", **kwargs):
+    dumped = pickle.dumps(obj, **kwargs)
+    encoded = base64.b64encode(dumped).decode("utf-8")
+    return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
+
+
+def decode_pickle(data_url, **kwargs):
+    data_url = _validate_data_prefix(data_url)
+    header, data = data_url.split(",")
+    _validate_b64_header(header)
+
+    decoded = base64.b64decode(data)
+
+    return pickle.loads(decoded, **kwargs)
