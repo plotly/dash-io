@@ -1,4 +1,5 @@
 import base64
+import os
 import json
 from io import BytesIO, StringIO
 import pickle
@@ -48,8 +49,8 @@ def _validate_format(format, accepted):
 
 
 def get_format(filename):
-    parts = filename.split(".")
-    extension = parts[-1]
+    parts = os.path.splitext(filename)
+    extension = parts[-1][1:]
     return extension
 
 
