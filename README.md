@@ -20,8 +20,8 @@ url_im = dio.url_from_pillow(im)  # PIL image
 
 # ...
 
-df = dio.url_from_pandas(url_df)
-im = dio.url_from_pillow(url_im)
+df = dio.url_to_pandas(url_df)
+im = dio.url_to_pillow(url_im)
 ```
 
 ## Usage
