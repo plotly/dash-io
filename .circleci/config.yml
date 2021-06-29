@@ -22,11 +22,13 @@ jobs:
       - run:
           name: Run tests
           command: |
+            . venv/bin/activate
             pytest
 
       - run:
           name: Verify black
           command: |
+            . venv/bin/activate
             black . --check
 
 workflows:
