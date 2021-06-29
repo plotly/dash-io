@@ -123,9 +123,11 @@ def encode_pandas(
         df.to_parquet(buffer, **kwargs)
     elif format == "pickle":
         df.to_pickle(buffer, **kwargs)
-    elif format == "xlsx":
+    elif format in ("xls", "xlsx"):
         df.to_excel(buffer, **kwargs)
-
+    else:
+        raise ValueError(f'Incorrect format="{format}"')
+    
     buffer_val = buffer.getvalue()
 
     if mime_type == "text" and mime_subtype == "csv":
