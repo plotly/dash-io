@@ -1,38 +1,29 @@
-version: 2.1
-
 jobs:
-  build-and-test:
-    docker:
-      - image: cimg/python:3.9.5
-
+  build:
+    executor: python/default
     steps:
       - checkout
-
+      - python/install-packages:
+          pkg-manager: pip
+      - python/install-packages:
+          pip-dependency-file: requirements-dev.txt
+          pkg-manager: pip
+      - python/install-packages:
+          args: pytest
+          pkg-manager: pip
+          pypi-cache: true
       - run:
-          name: Create virtualenv
           command: |
-            python -m venv venv
-
+            pytest --version
+          name: Test
       - run:
-          name: Install requirements
           command: |
-            . venv/bin/activate
-            pip install .[dev]
-
-      - run:
-          name: Run tests
-          command: |
-            . venv/bin/activate
-            pytest
-
-      - run:
-          name: Verify black
-          command: |
-            . venv/bin/activate
             black . --check
-
+          name: Lint
+orbs:
+  python: circleci/python@1.4.0
+version: 2.1
 workflows:
-  version: 2
-  build:
+  main:
     jobs:
-      - build-and-test
+      - build
