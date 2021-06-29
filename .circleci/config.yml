@@ -8,12 +8,12 @@ jobs:
           pkg-manager: pip
       - run:
           command: |
-            pytest --version
-          name: Test
+            pytest
+          name: Run Test
       - run:
           command: |
             black . --check
-          name: Lint
+          name: Check Lint
 orbs:
   python: circleci/python@1.4.0
 version: 2.1
