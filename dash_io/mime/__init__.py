@@ -110,12 +110,18 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     return im
 
 
-def encode_pandas(
-    df, format="csv", mime_type="application", mime_subtype="octet-stream", **kwargs
-):
+def encode_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwargs):
     format = _validate_format(
         format, accepted=("csv", "parquet", "pickle", "xlsx", "xls")
     )
+
+    if format == "csv":
+        mime_type = mime_type or "text"
+        mime_subtype = mime_subtype or "csv"
+
+    else:
+        mime_type = mime_type or "application"
+        mime_subtype = mime_subtype or "octet-stream"
 
     buffer = _infer_buffer(mime_type, mime_subtype)
 
