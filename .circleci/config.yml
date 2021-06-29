@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            python -m pytest
+            pytest
 
       - run:
           name: Verify black
