@@ -4,8 +4,6 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: pip
-      - python/install-packages:
           pip-dependency-file: "requirements-dev.txt"
           pkg-manager: pip
       - run:
