@@ -24,9 +24,16 @@ def test_csv_bytesio():
     pd.testing.assert_frame_equal(df, decoded)
 
 
-def test_excel():
+def test_xlsx():
     encoded = dim.encode_pandas(df, format="xlsx", index=False)
     decoded = dim.decode_pandas(encoded, format="xlsx")
+
+    pd.testing.assert_frame_equal(df, decoded)
+
+
+def test_xls():
+    encoded = dim.encode_pandas(df, format="xls", index=False)
+    decoded = dim.decode_pandas(encoded, format="xls")
 
     pd.testing.assert_frame_equal(df, decoded)
 
