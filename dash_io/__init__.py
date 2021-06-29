@@ -53,7 +53,7 @@ def get_format(filename):
     """
     Parameters:
         filename (string, required): The name of your file, e.g. "my-image.png" or "my-data.csv"
-    
+
     Returns (string):
         The format of your data, e.g. "png" or "csv"
     """
@@ -70,7 +70,7 @@ def url_from_pillow(im, format="png", mime_type="image", mime_subtype=None, **kw
         mime_type (string, default="image"): The MIME type to use inside the header: "data:{mime_type}/{mime_subtype};base64,"
         mime_subtype (string, default=None): The MIME subtype to use inside the header: "data:{mime_type}/{mime_subtype};base64,". By default, it will be inferred from "format"
         **kwargs: Arguments passed to im.save
-    
+
     Returns (string):
         A base64-encoded data URL that you can easily send through the web.
     """
@@ -101,9 +101,9 @@ def url_to_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     """
     Parameters:
         data_url (string, required): A string that contains the base64-encoded content along with a MIME type header (starts with "data:")
-        accepted (tuple, default=("png", "jpeg")): 
+        accepted (tuple, default=("png", "jpeg")):
         **kwargs: Arguments passed to the pd.read_* function.
-    
+
     Returns (PIL.Image.Image):
         A Pillow Image object representing your image
     """
@@ -145,7 +145,7 @@ def url_from_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwarg
         mime_type (string, default=None): The MIME type to use inside the header: "data:{mime_type}/{mime_subtype};base64,". By default, it will be inferred: "text" if format="csv", "application" otherwise
         mime_subtype (string, default=None): The MIME subtype to use inside the header: "data:{mime_type}/{mime_subtype};base64,". By default, it will be inferred: "csv" if format="csv", "octet-stream" otherwise
         **kwargs: Arguments passed to the pd.read_* function
-    
+
     Returns (string):
         A base64-encoded data URL that you can easily send through the web
     """
@@ -190,7 +190,7 @@ def url_to_pandas(data_url, format="csv", **kwargs):
         data_url (string, required): A string that contains the base64-encoded content along with a MIME type header (starts with "data:")
         format (string, default="csv"): The format in which the file was originally saved by pandas. Must be one of: "csv", "parquet", "pickle", "xlsx", "xls"
         **kwargs: Arguments passed to the pd.read_* function
-    
+
     Returns (pd.DataFrame):
         The pandas dataframe representing your file
     """
@@ -231,7 +231,7 @@ def url_from_json(obj, mime_type="application", mime_subtype="json", **kwargs):
         mime_type (string, default="application"): The MIME type to use inside the header: "data:{mime_type}/{mime_subtype};base64,"
         mime_subtype (string, default="json"): The MIME subtype to use inside the header: "data:{mime_type}/{mime_subtype};base64,"
         **kwargs: Arguments passed to the json.dumps
-    
+
     Returns (string):
         A base64-encoded data URL that you can easily send through the web
     """
@@ -245,7 +245,7 @@ def url_to_json(data_url, **kwargs):
     Parameters:
         data_url (string, required): A string that contains the base64-encoded content along with a MIME type header (starts with "data:")
         **kwargs: Arguments passed to the json.loads function
-    
+
     Returns (object):
         A python object was serialized through JSON (e.g. a dict, list, string)
     """
