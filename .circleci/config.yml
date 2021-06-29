@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          args: --upgrade pip
+          args: pip --upgrade
           pkg-manager: pip
       - python/install-packages:
           pip-dependency-file: "requirements-dev.txt"
