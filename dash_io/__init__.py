@@ -55,7 +55,7 @@ def get_format(filename):
     return extension
 
 
-def encode_pillow(im, format="png", mime_type="image", mime_subtype=None, **kwargs):
+def url_from_pillow(im, format="png", mime_type="image", mime_subtype=None, **kwargs):
     format = _validate_format(format, accepted=("png", "jpg", "jpeg", "gif"))
 
     # comply to mime types
@@ -79,7 +79,7 @@ def encode_pillow(im, format="png", mime_type="image", mime_subtype=None, **kwar
     return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
+def url_to_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
     mime_type, mime_subtype = _validate_b64_header(header).split("/")
@@ -110,7 +110,7 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     return im
 
 
-def encode_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwargs):
+def url_from_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwargs):
     format = _validate_format(
         format, accepted=("csv", "parquet", "pickle", "xlsx", "xls")
     )
@@ -146,7 +146,7 @@ def encode_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwargs)
     return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_pandas(data_url, format="csv", **kwargs):
+def url_to_pandas(data_url, format="csv", **kwargs):
     format = _validate_format(
         format, accepted=("csv", "parquet", "pickle", "xlsx", "xls")
     )
@@ -177,13 +177,13 @@ def decode_pandas(data_url, format="csv", **kwargs):
     return df
 
 
-def encode_json(obj, mime_type="application", mime_subtype="json", **kwargs):
+def url_from_json(obj, mime_type="application", mime_subtype="json", **kwargs):
     dumped = json.dumps(obj, **kwargs).encode("utf-8")
     encoded = base64.b64encode(dumped).decode("utf-8")
     return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_json(data_url, **kwargs):
+def url_to_json(data_url, **kwargs):
     data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
     _validate_b64_header(header)
