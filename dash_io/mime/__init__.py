@@ -180,19 +180,3 @@ def decode_json(data_url, **kwargs):
     decoded = base64.b64decode(data)
 
     return json.loads(decoded, **kwargs)
-
-
-def encode_pickle(obj, mime_type="application", mime_subtype="octet-stream", **kwargs):
-    dumped = pickle.dumps(obj, **kwargs)
-    encoded = base64.b64encode(dumped).decode("utf-8")
-    return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
-
-
-def decode_pickle(data_url, **kwargs):
-    data_url = _validate_data_prefix(data_url)
-    header, data = data_url.split(",")
-    _validate_b64_header(header)
-
-    decoded = base64.b64decode(data)
-
-    return pickle.loads(decoded, **kwargs)
