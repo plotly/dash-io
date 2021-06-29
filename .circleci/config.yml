@@ -1,5 +1,5 @@
 jobs:
-  build:
+  test-and-lint:
     executor: python/default
     steps:
       - checkout
@@ -20,4 +20,4 @@ version: 2.1
 workflows:
   main:
     jobs:
-      - build
+      - test-and-lint
