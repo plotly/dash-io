@@ -1,6 +1,6 @@
 jobs:
   test-and-lint:
-    executor: python/default
+    executor: python/3.8
     steps:
       - checkout
       - python/install-packages:
