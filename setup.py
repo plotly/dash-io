@@ -18,5 +18,5 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
-    install_requires=["Pillow", "pandas"],
+    install_requires=["Pillow>=8.2.0", "pandas"],
 )
