@@ -113,7 +113,7 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
 def encode_pandas(
     df, format="csv", mime_type="application", mime_subtype="octet-stream", **kwargs
 ):
-    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
+    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx", "xls"))
 
     buffer = _infer_buffer(mime_type, mime_subtype)
 
@@ -139,7 +139,7 @@ def encode_pandas(
 
 
 def decode_pandas(data_url, format="csv", **kwargs):
-    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx"))
+    format = _validate_format(format, accepted=("csv", "parquet", "pickle", "xlsx", "xls"))
 
     data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
@@ -161,7 +161,7 @@ def decode_pandas(data_url, format="csv", **kwargs):
         df = pd.read_parquet(buffer, **kwargs)
     elif format == "pickle":
         df = pd.read_pickle(buffer, **kwargs)
-    elif format == "xlsx":
+    elif format in ("xls", "xlsx"):
         df = pd.read_excel(buffer, **kwargs)
 
     return df
