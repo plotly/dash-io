@@ -3,3 +3,4 @@ pytest
 black
 openpyxl
 pyarrow
+xlrd==1.*
