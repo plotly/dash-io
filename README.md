@@ -108,6 +108,14 @@ encoded = dim.encode_pickle(obj)
 decoded = dim.decode_pickle(encoded)
 ```
 
+#### Note
+
+If you are using Python 3.6, you will need to downgrade `pandas` to `0.24`, since pandas v0.25, v1.0 and v1.1 do not support in-memory pickle loading/saving. Once `pandas==0.24.*`, you will need to set compression to `None`:
+```python
+encoded = dim.encode_pickle(obj, compression=None)
+decoded = dim.decode_pickle(encoded, compression=None)
+```
+
 
 ## Development
 
