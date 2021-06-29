@@ -1,0 +1,41 @@
+jobs:
+  test-and-lint:
+    parameters:
+      version:
+        description: "Python minor version"
+        default: "3.8"
+        type: string
+    
+    docker:
+      - image: cimg/python:<< parameters.version >>
+    
+    steps:
+      - checkout
+      - python/install-packages:
+          pip-dependency-file: "requirements-dev.txt"
+          pkg-manager: pip
+      - run:
+          command: |
+            pytest
+          name: Run Test
+      - run:
+          command: |
+            black . --check
+          name: Check Lint
+
+orbs:
+  python: circleci/python@1.4.0
+
+version: 2.1
+
+workflows:
+  matrix-tests:
+    jobs:
+      - test-and-lint:
+          matrix:
+            parameters:
+              version:
+                - "3.6"
+                - "3.7"
+                - "3.8"
+                - "3.9"

@@ -21,6 +21,5 @@ setuptools.setup(
     install_requires=[
         "Pillow",
         "pandas"
-    ],
-    extras_require={"dev": ["black", "openpyxl", "pyarrow"]},
+    ]
 )
