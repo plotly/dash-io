@@ -18,6 +18,8 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
-    install_requires=["Pillow", "pandas"],
-    extras_require={"dev": ["black", "openpyxl", "pyarrow"]},
+    install_requires=[
+        "Pillow",
+        "pandas"
+    ]
 )

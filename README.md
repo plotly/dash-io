@@ -127,7 +127,7 @@ source venv/bin/activate
 Install dev dependencies:
 ```bash
 cd dash-io
-pip install -e .[dev]
+pip install requirements-dev.txt
 ```
 
 Run pytest:
