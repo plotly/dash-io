@@ -8,7 +8,7 @@ import dash_io.mime as dim
 
 def __pandas_is(*versions):
     major, minor, patch = pd.__version__.split(".")
-    return ".".join([major, minor]) not in versions
+    return ".".join([major, minor]) in versions
 
 
 assert_fail_msg = "Original dataframe does not match decoded dataframe."
