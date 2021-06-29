@@ -3,8 +3,8 @@ jobs:
     parameters:
       version:
         description: "Python minor version"
-        default: 3.8
-        type: number
+        default: "3.8"
+        type: string
     
     docker:
       - image: cimg/python:<< parameters.version >>
@@ -35,7 +35,7 @@ workflows:
           matrix:
             parameters:
               version:
-                - 3.6
-                - 3.7
-                - 3.8
-                - 3.9
+                - "3.6"
+                - "3.7"
+                - "3.8"
+                - "3.9"
