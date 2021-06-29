@@ -51,7 +51,7 @@ def test_la():
 def test_exploit_file():
     # First, open the exploit file (fake png that will run malware)
     file = "tests/data/exploit_image_do_not_open.png"
-    with open(file, 'rb') as f:
+    with open(file, "rb") as f:
         buffer = BytesIO(f.read())
     # encode the exploit script to base64
     encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
@@ -60,5 +60,3 @@ def test_exploit_file():
     # now, try to decode the exploit script - this should give an error
     with pytest.raises(UnidentifiedImageError):
         dim.decode_pillow(encoded)
-
-    
