@@ -45,6 +45,7 @@ def _validate_format(format, accepted):
 
     return format
 
+
 # Main functions
 
 
@@ -78,16 +79,33 @@ def encode_pillow(im, format="png", mime_type="image", mime_subtype=None, **kwar
     return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
 
 
-def decode_pillow(data_url, **kwargs):
+def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     data_url = _validate_data_prefix(data_url)
     header, data = data_url.split(",")
-    _validate_b64_header(header)
+    mime_type, mime_subtype = _validate_b64_header(header).split("/")
 
     decoded = base64.b64decode(data)
-
     buffer = BytesIO(decoded)
-    im = Image.open(buffer, **kwargs)
 
+    
+    print(mime_subtype.upper())
+
+    if accepted == "all":
+        im = Image.open(buffer, **kwargs)
+
+
+    elif mime_subtype in accepted:
+        Image.init()
+        Image.ID = [mime_subtype.upper()]
+        im = Image.open(buffer, **kwargs)
+    else:
+        error_msg = (
+            f'"{mime_type}" is not a format accepted {accepted}. Please choose a format that is accepted, '
+            'add your desired format to the accepted tuple, or set accepted="all" if you want to bypass '
+            "the security check (only do this if the file you are decoding is trusted)."
+        )
+        raise ValueError(error_msg)
+    
     return im
 
 
