@@ -87,7 +87,6 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     decoded = base64.b64decode(data)
     buffer = BytesIO(decoded)
 
-    
     print(mime_subtype.upper())
 
     Image.init()
@@ -97,9 +96,9 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
         im = Image.open(buffer, **kwargs)
 
     elif mime_subtype in accepted:
-        kwargs['formats'] = [mime_subtype.upper()]
+        kwargs["formats"] = [mime_subtype.upper()]
         im = Image.open(buffer, **kwargs)
-    
+
     else:
         error_msg = (
             f'"{mime_type}" is not a format accepted {accepted}. Please choose a format that is accepted, '
@@ -107,7 +106,7 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
             "the security check (only do this if the file you are decoding is trusted)."
         )
         raise ValueError(error_msg)
-    
+
     return im
 
 
