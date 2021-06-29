@@ -3,8 +3,8 @@ jobs:
     parameters:
       version:
         description: "Python minor version"
-        default: "3.8"
-        type: string
+        default: 3.8
+        type: number
     
     docker:
       - image: cimg/python:<< parameters.version >>
