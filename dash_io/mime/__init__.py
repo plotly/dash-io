@@ -90,14 +90,16 @@ def decode_pillow(data_url, accepted=("png", "jpeg"), **kwargs):
     
     print(mime_subtype.upper())
 
+    Image.init()
+    print("Image ID:", Image.ID)
+
     if accepted == "all":
         im = Image.open(buffer, **kwargs)
 
-
     elif mime_subtype in accepted:
-        Image.init()
-        Image.ID = [mime_subtype.upper()]
+        kwargs['formats'] = [mime_subtype.upper()]
         im = Image.open(buffer, **kwargs)
+    
     else:
         error_msg = (
             f'"{mime_type}" is not a format accepted {accepted}. Please choose a format that is accepted, '
