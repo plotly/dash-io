@@ -11,6 +11,10 @@ jobs:
     
     steps:
       - checkout
+      - run:
+          command: |
+            pip install --upgrade pip
+          name: Upgrade pip
       - python/install-packages:
           pip-dependency-file: "requirements-dev.txt"
           pkg-manager: pip
