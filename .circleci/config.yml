@@ -11,9 +11,8 @@ jobs:
     
     steps:
       - checkout
-      - python/install-packages:
-          args: pip --upgrade
-          pkg-manager: pip
+      - run:
+          command: pip install --upgrade pip
       - python/install-packages:
           pip-dependency-file: "requirements-dev.txt"
           pkg-manager: pip
