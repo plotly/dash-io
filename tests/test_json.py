@@ -32,7 +32,7 @@ def test_nested_dict():
 
     assert di == decoded
 
-    di = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
+    di = {"col_1": [3, 2, 1, 0], "col_2": ["a", "b", "c", "d"]}
     encoded = dim.encode_json(di)
     decoded = dim.decode_json(encoded)
 
