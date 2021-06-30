@@ -124,8 +124,16 @@ import dash_io as dio
 help(dio)
 ```
 
-Here's a (potentially outdated) output of the call above:
+Here's the output:
 ```
+Python Library Documentation: package dash_io
+
+NAME
+    dash_io
+
+PACKAGE CONTENTS
+
+
 FUNCTIONS
     get_format(filename)
         Parameters:
@@ -186,11 +194,12 @@ FUNCTIONS
     url_to_pillow(data_url, accepted=('png', 'jpeg'), **kwargs)
         Parameters:
             data_url (string, required): A string that contains the base64-encoded content along with a MIME type header (starts with "data:")
-            accepted (tuple, default=("png", "jpeg")): 
+            accepted (tuple, default=("png", "jpeg")):
             **kwargs: Arguments passed to the pd.read_* function.
         
         Returns (PIL.Image.Image):
             A Pillow Image object representing your image
+
 ```
 
 
