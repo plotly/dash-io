@@ -22,6 +22,6 @@ setuptools.setup(
         "Pillow>=8.2",
         'pandas;python_version<"3.7"',
         'pandas>=1.2;python_version>="3.7"',
-        'pyarrow'
+        "pyarrow",
     ],
 )

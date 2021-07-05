@@ -28,7 +28,7 @@ def test_csv_stringio():
 
 
 @pytest.mark.skipif(
-    pd.__version__ < '1.2.0',
+    pd.__version__ < "1.2.0",
     reason="Saving CSV to BytesIO is not supported in pandas 1.1",
 )
 def test_csv_bytesio():
