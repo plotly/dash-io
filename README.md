@@ -47,7 +47,7 @@ The following format are currently supported: `jpg`, `png`.
 
 ### Pandas
 
-If you use `parquet` or `xlsx`, make sure to install the correct engines, i.e. `pyarrow` and `openpyxl` respectively.
+If you use `xlsx`, make sure to install a third-party engine such as `openpyxl`.
 
 To use it in pandas:
 ```python
@@ -71,7 +71,7 @@ encoded = dio.url_from_pandas(df, format="csv", mime_type="text", mime_subtype="
 decoded = dio.url_to_pandas(encoded, format="csv")
 ```
 
-The following format are currently supported: `csv`, `parquet`, `pickle`, `xlsx`.
+The following format are currently supported: `csv`, `parquet`, `feather`, `xlsx`.
 
 
 ### JSON
@@ -106,14 +106,6 @@ class ExampleClass:
 obj = ExampleClass()
 encoded = dio.url_from_pickle(obj)
 decoded = dio.url_to_pickle(encoded)
-```
-
-#### Note
-
-If you are using Python 3.6, you will need to downgrade `pandas` to `0.24`, since pandas v0.25, v1.0 and v1.1 do not support in-memory pickle loading/saving. Once `pandas==0.24.*`, you will need to set compression to `None`:
-```python
-encoded = dio.url_from_pickle(obj, compression=None)
-decoded = dio.url_to_pickle(encoded, compression=None)
 ```
 
 ## Documentation
