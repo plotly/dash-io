@@ -5,12 +5,6 @@ import pytest
 
 import dash_io as dio
 
-
-def __pandas_is(*versions):
-    major, minor, patch = pd.__version__.split(".")
-    return ".".join([major, minor]) in versions
-
-
 assert_fail_msg = "Original dataframe does not match decoded dataframe."
 
 
@@ -34,7 +28,7 @@ def test_csv_stringio():
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 7),
+    pd.__version__ < '1.2.0',
     reason="Saving CSV to BytesIO is not supported in pandas 1.1",
 )
 def test_csv_bytesio():
