@@ -141,7 +141,7 @@ def url_from_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwarg
     """
     Parameters:
         df (pd.DataFrame, required): A pandas dataframe that will be converted to a data URL
-        format (string, default="csv"): The format to which you want to save your dataframe. Must be one of: "csv", "parquet", "pickle", "xlsx", "xls"
+        format (string, default="csv"): The format to which you want to save your dataframe. Must be one of: "csv", "parquet", "feather", "xlsx", "xls"
         mime_type (string, default=None): The MIME type to use inside the header: "data:{mime_type}/{mime_subtype};base64,". By default, it will be inferred: "text" if format="csv", "application" otherwise
         mime_subtype (string, default=None): The MIME subtype to use inside the header: "data:{mime_type}/{mime_subtype};base64,". By default, it will be inferred: "csv" if format="csv", "octet-stream" otherwise
         **kwargs: Arguments passed to the pd.read_* function
@@ -150,7 +150,7 @@ def url_from_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwarg
         A base64-encoded data URL that you can easily send through the web
     """
     format = _validate_format(
-        format, accepted=("csv", "parquet", "pickle", "xlsx", "xls")
+        format, accepted=("csv", "parquet", "feather", "xlsx", "xls")
     )
 
     if format == "csv":
@@ -167,8 +167,8 @@ def url_from_pandas(df, format="csv", mime_type=None, mime_subtype=None, **kwarg
         df.to_csv(buffer, **kwargs)
     elif format == "parquet":
         df.to_parquet(buffer, **kwargs)
-    elif format == "pickle":
-        df.to_pickle(buffer, **kwargs)
+    elif format == "feather":
+        df.to_feather(buffer, **kwargs)
     elif format in ("xls", "xlsx"):
         df.to_excel(buffer, **kwargs)
     else:
@@ -188,14 +188,14 @@ def url_to_pandas(data_url, format="csv", **kwargs):
     """
     Parameters:
         data_url (string, required): A string that contains the base64-encoded content along with a MIME type header (starts with "data:")
-        format (string, default="csv"): The format in which the file was originally saved by pandas. Must be one of: "csv", "parquet", "pickle", "xlsx", "xls"
+        format (string, default="csv"): The format in which the file was originally saved by pandas. Must be one of: "csv", "parquet", "feather", "xlsx", "xls"
         **kwargs: Arguments passed to the pd.read_* function
 
     Returns (pd.DataFrame):
         The pandas dataframe representing your file
     """
     format = _validate_format(
-        format, accepted=("csv", "parquet", "pickle", "xlsx", "xls")
+        format, accepted=("csv", "parquet", "feather", "xlsx", "xls")
     )
 
     data_url = _validate_data_prefix(data_url)
@@ -216,8 +216,8 @@ def url_to_pandas(data_url, format="csv", **kwargs):
         df = pd.read_csv(buffer, **kwargs)
     elif format == "parquet":
         df = pd.read_parquet(buffer, **kwargs)
-    elif format == "pickle":
-        df = pd.read_pickle(buffer, **kwargs)
+    elif format == "feather":
+        df = pd.read_feather(buffer, **kwargs)
     elif format in ("xls", "xlsx"):
         df = pd.read_excel(buffer, **kwargs)
 

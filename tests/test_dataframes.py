@@ -71,23 +71,8 @@ def test_parquet():
     pd.testing.assert_frame_equal(df, decoded)
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 7),
-    reason="Infer pickle compression is not supported in pandas 1.1 or below",
-)
-def test_pickle():
-    encoded = dio.url_from_pandas(df, format="pickle")
-    decoded = dio.url_to_pandas(encoded, format="pickle")
-
-    pd.testing.assert_frame_equal(df, decoded)
-
-
-@pytest.mark.skipif(
-    __pandas_is("0.25", "1.0", "1.1"),
-    reason="Loading/saving pickle to memory v0.25, v1.0, v1.1",
-)
-def test_pickle_no_compression():
-    encoded = dio.url_from_pandas(df, format="pickle", compression=None)
-    decoded = dio.url_to_pandas(encoded, format="pickle", compression=None)
+def test_feather():
+    encoded = dio.url_from_pandas(df, format="feather")
+    decoded = dio.url_to_pandas(encoded, format="feather")
 
     pd.testing.assert_frame_equal(df, decoded)
