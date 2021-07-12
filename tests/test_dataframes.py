@@ -1,6 +1,9 @@
-import pandas as pd
+import sys
 
-import dash_io.mime as dim
+import pandas as pd
+import pytest
+
+import dash_io as dio
 
 assert_fail_msg = "Original dataframe does not match decoded dataframe."
 
@@ -9,37 +12,61 @@ df = pd.read_csv("tests/data/sample.csv")
 
 
 def test_csv_stringio():
-    encoded = dim.encode_pandas(
+    # Test implicitly
+    encoded = dio.url_from_pandas(df, format="csv", index=False)
+    decoded = dio.url_to_pandas(encoded, format="csv")
+
+    pd.testing.assert_frame_equal(df, decoded)
+
+    # Test explicitly
+    encoded = dio.url_from_pandas(
         df, format="csv", mime_type="text", mime_subtype="csv", index=False
     )
-    decoded = dim.decode_pandas(encoded, format="csv")
+    decoded = dio.url_to_pandas(encoded, format="csv")
 
     pd.testing.assert_frame_equal(df, decoded)
 
 
+@pytest.mark.skipif(
+    pd.__version__ < "1.2.0",
+    reason="Saving CSV to BytesIO is not supported in pandas 1.1",
+)
 def test_csv_bytesio():
-    encoded = dim.encode_pandas(df, format="csv", index=False)
-    decoded = dim.decode_pandas(encoded, format="csv")
+    encoded = dio.url_from_pandas(
+        df,
+        format="csv",
+        mime_type="application",
+        mime_subtype="octet-stream",
+        index=False,
+    )
+    decoded = dio.url_to_pandas(encoded, format="csv")
 
     pd.testing.assert_frame_equal(df, decoded)
 
 
-def test_excel():
-    encoded = dim.encode_pandas(df, format="xlsx", index=False)
-    decoded = dim.decode_pandas(encoded, format="xlsx")
+def test_xlsx():
+    encoded = dio.url_from_pandas(df, format="xlsx", index=False)
+    decoded = dio.url_to_pandas(encoded, format="xlsx")
+
+    pd.testing.assert_frame_equal(df, decoded)
+
+
+def test_xls():
+    encoded = dio.url_from_pandas(df, format="xls", index=False)
+    decoded = dio.url_to_pandas(encoded, format="xls")
 
     pd.testing.assert_frame_equal(df, decoded)
 
 
 def test_parquet():
-    encoded = dim.encode_pandas(df, format="parquet")
-    decoded = dim.decode_pandas(encoded, format="parquet")
+    encoded = dio.url_from_pandas(df, format="parquet")
+    decoded = dio.url_to_pandas(encoded, format="parquet")
 
     pd.testing.assert_frame_equal(df, decoded)
 
 
-def test_pickle():
-    encoded = dim.encode_pandas(df, format="pickle")
-    decoded = dim.decode_pandas(encoded, format="pickle")
+def test_feather():
+    encoded = dio.url_from_pandas(df, format="feather")
+    decoded = dio.url_to_pandas(encoded, format="feather")
 
     pd.testing.assert_frame_equal(df, decoded)

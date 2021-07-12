@@ -11,17 +11,17 @@ pip install git+https://github.com/plotly/dash-io
 
 Start using it inside Python
 ```python
-import dash_io.mime as dim
+import dash_io as dio
 
 # ...
 
-url_df = dim.encode_pandas(df)  # dataframe
-url_im = dim.encode_pillow(im)  # PIL image
+url_df = dio.url_from_pandas(df)  # dataframe
+url_im = dio.url_from_pillow(im)  # PIL image
 
 # ...
 
-df = dim.encode_pandas(url_df)
-im = dim.encode_pillow(url_im)
+df = dio.url_to_pandas(url_df)
+im = dio.url_to_pillow(url_im)
 ```
 
 ## Usage
@@ -31,61 +31,61 @@ im = dim.encode_pillow(url_im)
 ```python
 from PIL import Image
 import numpy as np
-import dash_io.mime as dim
+import dash_io as dio
 
 # Dummy image in Pillow
 im = Image.fromarray(np.random.randint(0, 255, (100,100,3)))
 
 # Encode the image into a data url
-data_url = dim.encode_pillow(im, format="jpg")
+data_url = dio.url_from_pillow(im, format="jpg")
 
 # Decode the data url into a PIL image
-im = dim.decode_pillow(data_url, format="jpg")
+im = dio.url_to_pillow(data_url, format="jpg")
 ```
 
 The following format are currently supported: `jpg`, `png`.
 
 ### Pandas
 
-If you use `parquet` or `xlsx`, make sure to install the correct engines, i.e. `pyarrow` and `openpyxl` respectively.
+If you use `xlsx`, make sure to install a third-party engine such as `openpyxl`.
 
 To use it in pandas:
 ```python
 import pandas as pd
-import dash_io.mime as dim
+import dash_io as dio
 
 # Dummy data
 data = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
 df = pd.DataFrame.from_dict(data)
 
 # To encode/decode in binary CSV format
-encoded = dim.encode_pandas(df, format="csv", index=False)
-decoded = dim.decode_pandas(encoded, format="csv")
+encoded = dio.url_from_pandas(df, format="csv", index=False)
+decoded = dio.url_to_pandas(encoded, format="csv")
 
 # To encode/decode in binary parquet format
-encoded = dim.encode_pandas(df, format="parquet")
-decoded = dim.decode_pandas(encoded, format="parquet")
+encoded = dio.url_from_pandas(df, format="parquet")
+decoded = dio.url_to_pandas(encoded, format="parquet")
 
 # To encode/decode in string CSV format (i.e. text/csv MIME type)
-encoded = dim.encode_pandas(df, format="csv", mime_type="text", mime_subtype="csv", index=False)
-decoded = dim.decode_pandas(encoded, format="csv")
+encoded = dio.url_from_pandas(df, format="csv", mime_type="text", mime_subtype="csv", index=False)
+decoded = dio.url_to_pandas(encoded, format="csv")
 ```
 
-The following format are currently supported: `csv`, `parquet`, `pickle`, `xlsx`.
+The following format are currently supported: `csv`, `parquet`, `feather`, `xlsx`.
 
 
 ### JSON
 
 ```python
-import dash_io.mime as dim
+import dash_io as dio
 
 # Encode/decode dictionary
 data = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
-encoded = dim.encode_json(data)
-decoded = dim.decode_json(encoded)
+encoded = dio.url_from_json(data)
+decoded = dio.url_to_json(encoded)
 
 # It also works with lists and other JSON-serializable objects
-encoded = dim.encode_json([1,2,3,4,5])
+encoded = dio.url_from_json([1,2,3,4,5])
 ```
 
 Note that if a `dict` key is an integer, it will be converted to string by `json`. This is a normal behavior.
@@ -94,7 +94,7 @@ Note that if a `dict` key is an integer, it will be converted to string by `json
 
 You can also use pickle to store objects as strings:
 ```python
-import dash_io.mime as dim
+import dash_io as dio
 
 class ExampleClass:
     num = 35
@@ -104,9 +104,19 @@ class ExampleClass:
         return (self.num == other.num) and (self.st == other.st)
 
 obj = ExampleClass()
-encoded = dim.encode_pickle(obj)
-decoded = dim.decode_pickle(encoded)
+encoded = dio.url_from_pickle(obj)
+decoded = dio.url_to_pickle(encoded)
 ```
+
+## Documentation
+
+You can access the documentation by calling:
+```python
+import dash_io as dio
+help(dio)
+```
+
+You can find the up-to-date output from `help` inside [`DOCS.txt`](DOCS.txt).
 
 
 ## Development

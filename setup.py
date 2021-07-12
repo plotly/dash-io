@@ -19,7 +19,9 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
-        "Pillow",
-        "pandas"
-    ]
+        "Pillow>=8.2",
+        'pandas;python_version<"3.7"',
+        'pandas>=1.2;python_version>="3.7"',
+        "pyarrow",
+    ],
 )
