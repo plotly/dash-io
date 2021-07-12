@@ -6,7 +6,7 @@ An API prototype for simplifying IO in Dash. This is an experimental library and
 
 To install the library:
 ```bash
-pip install git+https://github.com/plotly/dash-io
+pip install dash-io
 ```
 
 Start using it inside Python
