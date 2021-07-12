@@ -3,3 +3,4 @@ pytest
 black
 openpyxl
 xlrd==1.*
+twine
