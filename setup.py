@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="dash-io",
-    version="0.0.1",
+    version="0.0.1.post1",
     author="Plotly",
     author_email="xinghan@plot.ly",
     description="An API prototype for simplifying IO in Dash",
