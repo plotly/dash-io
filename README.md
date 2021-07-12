@@ -116,7 +116,7 @@ import dash_io as dio
 help(dio)
 ```
 
-You can find the update to date output from `help` inside [`DOCS.txt`](DOCS.txt).
+You can find the up-to-date output from `help` inside [`DOCS.txt`](DOCS.txt).
 
 
 ## Development
