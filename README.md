@@ -91,6 +91,17 @@ encoded = dio.url_from_json([1,2,3,4,5])
 Note that if a `dict` key is an integer, it will be converted to string by `json`. This is a normal behavior.
 
 
+### Numpy
+
+```python
+import dash_io as dio
+
+# Encode/decode numpy arrays
+array = np.array([[1, 2, 3], [4, 5, 6]])
+encoded = dio.url_from_numpy(array)
+decoded = dio.url_to_numpy(encoded)
+```
+
 ## Documentation
 
 You can access the documentation by calling:
