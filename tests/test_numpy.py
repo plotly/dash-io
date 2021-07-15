@@ -16,9 +16,14 @@ def test_array():
 def test_allow_pickle():
     with pytest.raises(ValueError):
         encoded = dio.url_from_numpy(array, allow_pickle=False)
-        encoded = dio.url_from_numpy(array, allow_pickle=True)
 
     with pytest.raises(ValueError):
-        encoded = dio.url_from_numpy(array)
+        encoded = dio.url_from_numpy(array, allow_pickle=True)
+
+    encoded = dio.url_from_numpy(array)
+
+    with pytest.raises(ValueError):
         decoded = dio.url_to_numpy(encoded, allow_pickle=False)
+
+    with pytest.raises(ValueError):
         decoded = dio.url_to_numpy(encoded, allow_pickle=True)
