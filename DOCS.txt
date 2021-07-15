@@ -24,6 +24,14 @@ FUNCTIONS
         Returns (string):
             A base64-encoded data URL that you can easily send through the web
     
+    url_from_numpy(array, mime_type='application', mime_subtype='octet-stream', **kwargs)
+        Parameters:
+            array (np.array, required): A numpy array that will be converted to a data URL
+            **kwargs: Arguments passed to the np.save function
+        
+        Returns (string):
+            A base64-encoded data URL that you can easily send through the web
+    
     url_from_pandas(df, format='csv', mime_type=None, mime_subtype=None, **kwargs)
         Parameters:
             df (pd.DataFrame, required): A pandas dataframe that will be converted to a data URL
@@ -53,6 +61,14 @@ FUNCTIONS
         
         Returns (object):
             A python object was serialized through JSON (e.g. a dict, list, string)
+    
+    url_to_numpy(data_url, **kwargs)
+        Parameters:
+            data_url (string, required): A string that contains the base64-encoded array along with a MIME type header (starts with "data:")
+            **kwargs: Arguments passed to the np.load function
+        
+        Returns (np.array):
+            A numpy array that was previous saved by np.save
     
     url_to_pandas(data_url, format='csv', **kwargs)
         Parameters:
