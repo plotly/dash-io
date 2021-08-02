@@ -302,8 +302,8 @@ def url_to_numpy(data_url, header=False, **kwargs):
             "allow_pickle is not supported for dio.url_to_numpy for security reasons."
         )
 
-    data_url = _validate_data_prefix(data_url)
     if header is True:
+        data_url = _validate_data_prefix(data_url)
         header, data = data_url.split(",")
         _validate_b64_header(header)
     else:
