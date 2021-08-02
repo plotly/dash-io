@@ -24,9 +24,10 @@ FUNCTIONS
         Returns (string):
             A base64-encoded data URL that you can easily send through the web
     
-    url_from_numpy(array, mime_type='application', mime_subtype='octet-stream', **kwargs)
+    url_from_numpy(array, header=False, **kwargs)
         Parameters:
             array (np.array, required): A numpy array that will be converted to a data URL
+            header (bool, default=False): Whether to include a MIME type header in the URL
             **kwargs: Arguments passed to the np.save function
         
         Returns (string):
@@ -62,9 +63,10 @@ FUNCTIONS
         Returns (object):
             A python object was serialized through JSON (e.g. a dict, list, string)
     
-    url_to_numpy(data_url, **kwargs)
+    url_to_numpy(data_url, header=False, **kwargs)
         Parameters:
             data_url (string, required): A string that contains the base64-encoded array along with a MIME type header (starts with "data:")
+            header (bool, default=False): Whether there is a MIME type header included in the input `data_url`
             **kwargs: Arguments passed to the np.load function
         
         Returns (np.array):

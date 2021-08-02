@@ -259,11 +259,12 @@ def url_to_json(data_url, **kwargs):
 
 
 def url_from_numpy(
-    array, mime_type="application", mime_subtype="octet-stream", **kwargs
+    array, header=False, **kwargs
 ):
     """
     Parameters:
         array (np.array, required): A numpy array that will be converted to a data URL
+        header (bool, default=False): Whether to include a MIME type header in the URL
         **kwargs: Arguments passed to the np.save function
 
     Returns (string):
@@ -281,13 +282,17 @@ def url_from_numpy(
 
     encoded = base64.b64encode(buffer_val).decode("utf-8")
 
-    return f"data:{mime_type}/{mime_subtype};base64,{encoded}"
+    if header is  True:
+        return f"data:application/octet-stream;base64,{encoded}"
+    else:
+        return encoded
 
 
-def url_to_numpy(data_url, **kwargs):
+def url_to_numpy(data_url, header=False, **kwargs):
     """
     Parameters:
         data_url (string, required): A string that contains the base64-encoded array along with a MIME type header (starts with "data:")
+        header (bool, default=False): Whether there is a MIME type header included in the input `data_url`
         **kwargs: Arguments passed to the np.load function
 
     Returns (np.array):
@@ -300,9 +305,12 @@ def url_to_numpy(data_url, **kwargs):
         )
 
     data_url = _validate_data_prefix(data_url)
-    header, data = data_url.split(",")
-    _validate_b64_header(header)
-
+    if header is True:
+        header, data = data_url.split(",")
+        _validate_b64_header(header)
+    else:
+        data = data_url
+    
     decoded = base64.b64decode(data)
 
     return np.load(BytesIO(decoded), allow_pickle=False, **kwargs)
