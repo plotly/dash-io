@@ -258,9 +258,7 @@ def url_to_json(data_url, **kwargs):
     return json.loads(decoded, **kwargs)
 
 
-def url_from_numpy(
-    array, header=False, **kwargs
-):
+def url_from_numpy(array, header=False, **kwargs):
     """
     Parameters:
         array (np.array, required): A numpy array that will be converted to a data URL
@@ -282,7 +280,7 @@ def url_from_numpy(
 
     encoded = base64.b64encode(buffer_val).decode("utf-8")
 
-    if header is  True:
+    if header is True:
         return f"data:application/octet-stream;base64,{encoded}"
     else:
         return encoded
@@ -310,7 +308,7 @@ def url_to_numpy(data_url, header=False, **kwargs):
         _validate_b64_header(header)
     else:
         data = data_url
-    
+
     decoded = base64.b64decode(data)
 
     return np.load(BytesIO(decoded), allow_pickle=False, **kwargs)
