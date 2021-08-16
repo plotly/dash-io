@@ -2,10 +2,10 @@ import base64
 import os
 import json
 from io import BytesIO, StringIO
-import pickle
 
 import pandas as pd
 from PIL import Image
+import numpy as np
 
 
 # Helper functions
@@ -256,3 +256,59 @@ def url_to_json(data_url, **kwargs):
     decoded = base64.b64decode(data)
 
     return json.loads(decoded, **kwargs)
+
+
+def url_from_numpy(array, header=False, **kwargs):
+    """
+    Parameters:
+        array (np.array, required): A numpy array that will be converted to a data URL
+        header (bool, default=False): Whether to include a MIME type header in the URL
+        **kwargs: Arguments passed to the np.save function
+
+    Returns (string):
+        A base64-encoded data URL that you can easily send through the web
+    """
+    if "allow_pickle" in kwargs:
+        raise ValueError(
+            "allow_pickle cannot be passed to url_from_numpy for security reasons."
+        )
+
+    buffer = BytesIO()
+    np.save(buffer, array, allow_pickle=False, **kwargs)
+
+    buffer_val = buffer.getvalue()
+
+    encoded = base64.b64encode(buffer_val).decode("utf-8")
+
+    if header is True:
+        return f"data:application/octet-stream;base64,{encoded}"
+    else:
+        return encoded
+
+
+def url_to_numpy(data_url, header=False, **kwargs):
+    """
+    Parameters:
+        data_url (string, required): A string that contains the base64-encoded array along with a MIME type header (starts with "data:")
+        header (bool, default=False): Whether there is a MIME type header included in the input `data_url`
+        **kwargs: Arguments passed to the np.load function
+
+    Returns (np.array):
+        A numpy array that was previous saved by np.save
+    """
+
+    if "allow_pickle" in kwargs:
+        raise ValueError(
+            "allow_pickle is not supported for dio.url_to_numpy for security reasons."
+        )
+
+    if header is True:
+        data_url = _validate_data_prefix(data_url)
+        header, data = data_url.split(",")
+        _validate_b64_header(header)
+    else:
+        data = data_url
+
+    decoded = base64.b64decode(data)
+
+    return np.load(BytesIO(decoded), allow_pickle=False, **kwargs)

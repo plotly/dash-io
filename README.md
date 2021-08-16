@@ -91,6 +91,25 @@ encoded = dio.url_from_json([1,2,3,4,5])
 Note that if a `dict` key is an integer, it will be converted to string by `json`. This is a normal behavior.
 
 
+### Numpy
+
+By default, `numpy` arrays will not contain the mime header. However, you can enable it with `header=True` (e.g. if you want to upload/download a `npy` file).
+
+```python
+import dash_io as dio
+
+# Encode/decode numpy arrays without MIME header by default
+array = np.array([[1, 2, 3], [4, 5, 6]])
+encoded = dio.url_from_numpy(array)
+decoded = dio.url_to_numpy(encoded)
+
+# You can also use headers
+encoded = dio.url_from_numpy(array, header=True)
+decoded = dio.url_to_numpy(encoded, header=True)
+```
+
+Note that pickling is disabled for `npy` files for security reasons.
+
 ## Documentation
 
 You can access the documentation by calling:
